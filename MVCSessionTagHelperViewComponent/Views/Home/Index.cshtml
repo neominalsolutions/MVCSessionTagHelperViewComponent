@@ -4,20 +4,27 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core 324dsdfsdfds</a>.</p>
 </div>
 
+
+@if (User.Identity.IsAuthenticated) { 
+    <p>Oturum Açan Kullanıcı @User.Identity.Name</p>
+}
+
+
+@await Component.InvokeAsync("Menu")
 
 
 
 @*<div class="ui labeled button" tabindex="0">
-    <div class="ui button">
-        <i class="comment icon"></i> Comments
-    </div>
-    <a class="ui basic label">
-        2,048
-    </a>
-</div>*@
+        <div class="ui button">
+            <i class="comment icon"></i> Comments
+        </div>
+        <a class="ui basic label">
+            2,048
+        </a>
+    </div>*@
 
 <comment-box text="Comments" count="1231412314"></comment-box>
 <social-box text="Comments" icon-class="comment" count="2048"></social-box>
@@ -25,21 +32,21 @@
 <social-box text="Share" icon-class="fork" count="435435"></social-box>
 
 @*<div class="ui left labeled button" tabindex="0">
-    <a class="ui basic right pointing label">
-        2,048
-    </a>
-    <div class="ui button">
-        <i class="heart icon"></i> Like
+        <a class="ui basic right pointing label">
+            2,048
+        </a>
+        <div class="ui button">
+            <i class="heart icon"></i> Like
+        </div>
     </div>
-</div>
-<div class="ui left labeled button" tabindex="0">
-    <a class="ui basic label">
-        1,048
-    </a>
-    <div class="ui icon button">
-        <i class="fork icon"></i>
-    </div>
-</div>*@
+    <div class="ui left labeled button" tabindex="0">
+        <a class="ui basic label">
+            1,048
+        </a>
+        <div class="ui icon button">
+            <i class="fork icon"></i>
+        </div>
+    </div>*@
 
 
 <text-center content-text="Deneme1"></text-center>

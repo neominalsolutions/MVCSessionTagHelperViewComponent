@@ -28,7 +28,12 @@ namespace MVCSessionTagHelperViewComponent
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddControllersWithViews();
+            services.AddRazorPages(); // razorpages ile de çalýþacaðýmýz için bu serviside aktif hale getiriyoruz.
+            services.AddSession();
+  
+            //services.AddRazorPages().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,16 +52,31 @@ namespace MVCSessionTagHelperViewComponent
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
 
+            app.UseRouting();
+            // Eðer Login iþlemi yapýyorsa bu middleware çalýþtýrmamýz lazým
+            app.UseAuthentication();
             app.UseAuthorization();
+
+
+            app.UseSession();
+
+            //app.UseBrowserLink();
 
             app.UseEndpoints(endpoints =>
             {
+
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                // RazorPages sayfalarýnda Login Register var buraya tanýtmak lazým
+                endpoints.MapRazorPages();
             });
+
+
+
         }
     }
 }
