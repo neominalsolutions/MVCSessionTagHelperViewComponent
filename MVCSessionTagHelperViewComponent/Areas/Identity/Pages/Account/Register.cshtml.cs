@@ -21,28 +21,27 @@ namespace MVCSessionTagHelperViewComponent.Areas.Identity.Pages.Account
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+        // user ile ilgili işlemleri identity üzerinden yönetmek için kullanılan services veritabanı işlemleri yaparız. User Create user Delete User Find vs gibi işlemleri yapar.
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
+        //private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            ILogger<RegisterModel> logger
+            /*IEmailSender emailSender*/)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
+            //_emailSender = emailSender;
         }
 
         [BindProperty]
         public InputModel Input { get; set; }
 
         public string ReturnUrl { get; set; }
-
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public class InputModel
         {
@@ -66,17 +65,37 @@ namespace MVCSessionTagHelperViewComponent.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+      
         }
+
+        // eğer aync bir işlem yapılacak ise bu şekilde bir kod yazılacak ise method async keyword ile başlayıp Task tipinde bir değer ile sarılmalıdır.
+
+        //public async  Task<IActionResult> OnPostAsync()
+        //{
+
+        //    await _userManager.FindByIdAsync("2144a637-685c-4bec-9382-a22c2daa48e5");
+
+        //    return Page();
+            
+        //}
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+     
             if (ModelState.IsValid)
             {
+                // user entity ApplicationUser
                 var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                // userManger bir userRepository
+                // yeni bir user oluşturma kodu.
+                IdentityResult result = await _userManager.CreateAsync(user, Input.Password);
+
+                //var result2 = await _userManager.ConfirmEmailAsync(user, "fdad");
+                //result2.
+
+
+                // işlem başarılı ise
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
@@ -89,8 +108,8 @@ namespace MVCSessionTagHelperViewComponent.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVCSessionTagHelperViewComponent.Models;
 using MVCSessionTagHelperViewComponent.SessionExtension;
@@ -13,7 +14,10 @@ namespace MVCSessionTagHelperViewComponent.Controllers
 
     public class SessionController : Controller
     {
-   
+
+        [Authorize]
+        // Sadece Oturum açan kullanıclar anasayfayı görebilir.
+        // kimlik doğrulamasına bakar.
         public IActionResult SetSession()
         {
 
@@ -27,6 +31,10 @@ namespace MVCSessionTagHelperViewComponent.Controllers
             return View();
         }
 
+        [Authorize]
+        // Sadece Oturum açan kullanıclar anasayfayı görebilir.
+        // kimlik doğrulamasına bakar.
+        // daha view açılmadan önce bu view yetki yoksa bu sayfa kullanıcıya gösterilemez.
         public IActionResult GetSession()
         {
 

@@ -9,7 +9,8 @@ using MVCSessionTagHelperViewComponent.Areas.Identity.Data;
 
 namespace MVCSessionTagHelperViewComponent.Areas.Identity.Data
 {
-    public class IdentityContext : IdentityDbContext<ApplicationUser>
+    // identity de primary key alanlarının defaultu string tanımlanmıştır.
+    public class IdentityContext : IdentityDbContext<ApplicationUser,ApplicationRole, string>
     {
         public IdentityContext(DbContextOptions<IdentityContext> options)
             : base(options)

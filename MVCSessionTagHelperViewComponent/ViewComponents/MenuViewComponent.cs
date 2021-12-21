@@ -15,27 +15,45 @@ namespace MVCSessionTagHelperViewComponent.ViewComponents
             {
                 new MenuViewModel
                 {
+                     AreaName =string.Empty,
                     ActionName = "Index",
                     ControllerName = "Home",
                     Title= "Anasayfa"
                 },
                 new MenuViewModel
                 {
+                     AreaName =string.Empty,
                   ActionName = "Privacy",
                   ControllerName = "Home",
                   Title = "Gizlilik"
                 },
                  new MenuViewModel
                 {
+                      AreaName =string.Empty,
                   ActionName = "SetSession",
                   ControllerName = "Session",
                   Title = "Oturum Kaydet"
                 },
                   new MenuViewModel
                 {
+                       AreaName =string.Empty,
                   ActionName = "GetSession",
                   ControllerName = "Session",
                   Title = "Oturum Getir"
+                },
+                     new MenuViewModel
+                {
+                         AreaName ="Identity",
+                  ActionName = "Logout",
+                  ControllerName = "Account",
+                  Title = "Oturumdan Çık"
+                },
+                new MenuViewModel
+                {
+                         AreaName ="Admin",
+                  ActionName = "Dashboard",
+                  ControllerName = "Index",
+                  Title = "Admin Module"
                 }
             };
 

@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MVCSessionTagHelperViewComponent.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +34,8 @@ namespace MVCSessionTagHelperViewComponent
             services.AddControllersWithViews();
             services.AddRazorPages(); // razorpages ile de çalýþacaðýmýz için bu serviside aktif hale getiriyoruz.
             services.AddSession();
+            services.AddTransient<IEmailSender, EmailSender>();
+            
   
             //services.AddRazorPages().AddRazorRuntimeCompilation();
         }
@@ -56,6 +60,7 @@ namespace MVCSessionTagHelperViewComponent
             app.UseRouting();
             // Eðer Login iþlemi yapýyorsa bu middleware çalýþtýrmamýz lazým
             app.UseAuthentication();
+           
             app.UseAuthorization();
 
 
@@ -66,6 +71,18 @@ namespace MVCSessionTagHelperViewComponent
             app.UseEndpoints(endpoints =>
             {
 
+                // mvc ile bir area açarsak buraya areasname ile bir yönlendirme kuralý yazmamýz gerekiyor
+
+                endpoints.MapAreaControllerRoute(
+                 name: "Admin",
+                 areaName: "Admin",
+                 pattern: "Admin/{controller=Dashboard}/{action=Index}");
+
+
+                //endpoints.MapAreaControllerRoute(
+                //name: "HumanResource",
+                //areaName: "HumanResource",
+                //pattern: "HR/{controller=Home}/{action=Index}");
 
                 endpoints.MapControllerRoute(
                     name: "default",

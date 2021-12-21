@@ -4,18 +4,22 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core 324dsdfsdfds</a>.</p>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
 
-@if (User.Identity.IsAuthenticated) { 
+@if (User.Identity.IsAuthenticated)
+{
     <p>Oturum Açan Kullanıcı @User.Identity.Name</p>
 }
 
 
+@if (User.IsInRole("Admin"))
+{
+    <p>Merhaba Admin User</p>
+}
+
 @await Component.InvokeAsync("Menu")
-
-
 
 @*<div class="ui labeled button" tabindex="0">
         <div class="ui button">
@@ -25,6 +29,10 @@
             2,048
         </a>
     </div>*@
+
+
+<a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin Module</a>
+
 
 <comment-box text="Comments" count="1231412314"></comment-box>
 <social-box text="Comments" icon-class="comment" count="2048"></social-box>

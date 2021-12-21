@@ -19,22 +19,24 @@ namespace MVCSessionTagHelperViewComponent.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
+        // kullanıcının hesap işlemleri yaparken oturup açma kapama gibi süreçlerini yönetmemiz sağlayn identity servisidir.
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<ApplicationUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole>  roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public string ReturnUrl { get; set; }
 
@@ -55,19 +57,14 @@ namespace MVCSessionTagHelperViewComponent.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public void OnGet(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-            returnUrl ??= Url.Content("~/");
-
-            // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            returnUrl ??= Url.Content("~/");  
 
             ReturnUrl = returnUrl;
         }
@@ -76,13 +73,33 @@ namespace MVCSessionTagHelperViewComponent.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
 
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+      
         
+
+
             if (ModelState.IsValid)
             {
+
+              
+
+                //var user = await _userManager.FindByEmailAsync(Input.Email);
+                //var lockOut = await _userManager.IsLockedOutAsync(user);
+
+                //if(lockOut)
+                //{
+                //    return RedirectToPage("./Lockout");
+                //}
+
+
+
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                // kullanıcıynın oturum açması için singManager bağlanıyoruz.
+                // RememberMe ile oturumu kalıcı mı yapacak yoksa uygulamadan ayrılınca oturum düşsün mü ayarı yapmış.
+                //lockoutOnFailure hata onunca oturumu kitleme false değeri vererek oturum kitleme olayını deaktif etmiş
+                // Belirli bir sürede belirli sayıda yanlış yapılırsa oturumun kiliştlenmesini sağlayacak bir mekanıuzma kurulabilir. 
+                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
