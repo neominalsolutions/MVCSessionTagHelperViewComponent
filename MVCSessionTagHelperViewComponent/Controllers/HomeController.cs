@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MVCSessionTagHelperViewComponent.Areas.Admin.Data;
+using MVCSessionTagHelperViewComponent.Areas.Identity.Data;
 using MVCSessionTagHelperViewComponent.Models;
 using System;
 using System.Collections.Generic;
@@ -13,18 +16,27 @@ namespace MVCSessionTagHelperViewComponent.Controllers
     // [Authorize]
     // Bu controller'a sadece login olan erişebilir.
     // eğer login değilsek login sayfasına sistem otomatik olarak yönlendirecektir.
+
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly AdminContext _adminContext;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, AdminContext adminContext, UserManager<ApplicationUser>  userManager)
         {
             _logger = logger;
+            _adminContext = adminContext;
+            _userManager = userManager;
         }
 
       
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+           var blog = _adminContext.Blogs.Find(2);
+           var user = await _userManager.FindByIdAsync(blog.UserId);
+
             return View();
         }
 

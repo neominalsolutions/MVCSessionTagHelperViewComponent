@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MVCSessionTagHelperViewComponent.Areas.Admin.Data;
 using MVCSessionTagHelperViewComponent.Services;
 using System;
 using System.Collections.Generic;
@@ -35,6 +37,11 @@ namespace MVCSessionTagHelperViewComponent
             services.AddRazorPages(); // razorpages ile de çalýþacaðýmýz için bu serviside aktif hale getiriyoruz.
             services.AddSession();
             services.AddTransient<IEmailSender, EmailSender>();
+
+            services.AddDbContext<AdminContext>(opt =>
+            {
+                opt.UseSqlServer(Configuration.GetConnectionString("IdentityContextConnection"));
+            });
             
   
             //services.AddRazorPages().AddRazorRuntimeCompilation();
